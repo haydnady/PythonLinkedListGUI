@@ -11,7 +11,7 @@ import sys
 import os
 
 
-class myApp(Ui_MainWindow):
+class mainApp(Ui_MainWindow):
     # Linked list.
     lList = SingleLinkedList()
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     MainWindow = QMainWindow()
 
     # Create an instance and show the form
-    ui = myApp(MainWindow)
+    ui = mainApp(MainWindow)
 
     # show the window and start the app
     MainWindow.show()

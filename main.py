@@ -1,129 +1,62 @@
-class ListNode:
-    def __init__(self, data):
-        # Constructor to initiate this object.
-        
-        # Store data.
-        self.data = data
-        
-        # Store reference (next item).
-        self.next = None
-        return
-    
-    def has_value(self, value):
-        # Method to compare the value with the node data.
-        if self.data == value:
-            return True
-        else:
-            return False
+"""
+    Main  
+"""
 
-class SingleLinkedList:
-    def __init__(self):
-        # Constructor to initiate this object.
-        
-        self.head = None
-        self.tail = None
-        return
+from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2 import QtUiTools, QtGui, QtWidgets
+from singleLinkedList import SingleLinkedList
+from singleLinkedList import ListNode
+from mainwindow import Ui_MainWindow
+import sys
+import os
 
-    def add_list_item(self, item):
-        # Add an item at the end of the list.
-        
-        if not isinstance(item, ListNode):
-            item = ListNode(item)
 
-        if self.head is None:
-            self.head = item
-        else:
-            self.tail.next = item
-
-        self.tail = item
-            
-        return
-
-    def output_list(self):
-        # Outputs the list (the value of the node, actually).
-        
-        current_node = self.head
-        
-        while current_node is not None:
-            print(current_node.data)
-            
-            # Jump to the linked node.
-            current_node = current_node.next
-            
-        return
-
-    def unordered_search (self, value):
-        # Search the linked list for the node that has this value.
-        
-        # Define current_node.
-        current_node = self.head
-        
-        # Define position.
-        node_id = 1
-        
-        # Define list of results.
-        results = []
-        
-        while current_node is not None:
-            if current_node.has_value(value):
-                results.append(node_id)
-                
-            # Jump to the linked node.
-            current_node = current_node.next
-            node_id = node_id + 1
-        
-        return results
-
-    def remove_list_item_by_value(self, value):
-        
-        # Define current_node.
-        current_node = self.head
-        previous_node = None
-        
-        # Define position.
-        node_id = 1
-        
-        while current_node is not None:
-            if current_node.has_value(value):
-                if previous_node is not None:
-                    previous_node.next = current_node.next
-                else:
-                    self.head = current_node.next
-                    # we don't have to look any further
-                    return
-                
-            # Jump to the linked node.
-            previous_node = current_node
-            current_node = current_node.next
-            node_id = node_id + 1
-        
-        return
-
-if __name__ == "__main__":
-    
+class myApp(Ui_MainWindow):
+    # Linked list.
     lList = SingleLinkedList()
 
-    # Add to list.
-    node1 = ListNode(10)
-    node2 = ListNode(5)
-    node3 = ListNode(3)
-    node4 = ListNode(59)
-    lList.add_list_item(node1)
-    lList.add_list_item(node2)
-    lList.add_list_item(node3)
-    lList.add_list_item(node4)
+    def __init__(self, window):
+        self.setupUi(window)
 
-    # Print list.
-    print("-----------------Old List")
-    lList.output_list()
+        # Connect button to functions.
+        self.addPushButton.clicked.connect(self.addUserInputToList)
+        self.removePushButton.clicked.connect(self.removeUserInputFromList)
+        self.findPushButton.clicked.connect(self.findUserInputFromList)
 
-    # Find in list.
-    print("-----------------")
-    print("Position:", lList.unordered_search(59))
+    def addUserInputToList(self):
+        # Get inputPlainTextEdit string
+        userInput = self.inputPlainTextEdit.toPlainText()
 
-    # Remove from list.
-    lList.remove_list_item_by_value(59)
+        # Print list.
+        self.beforeTextEdit.setPlainText(str(self.lList.output_list()))
+        #  Add user input to list.
+        self.lList.add_list_item(ListNode(userInput))
+        # Print new/current list.
+        self.currentTextEdit.setPlainText(str(self.lList.output_list()))
 
-    # Print list.
-    print("-----------------Current List")
-    lList.output_list()
+    def removeUserInputFromList(self):
+        # Get inputPlainTextEdit string
+        userInput = self.inputPlainTextEdit.toPlainText()
+
+        # Print list.
+        self.beforeTextEdit.setPlainText(str(self.lList.output_list()))
+        #  Remove user input to list.
+        self.lList.remove_list_item_by_value(userInput)
+        # Print new/current list.
+        self.currentTextEdit.setPlainText(str(self.lList.output_list()))
+
+    def findUserInputFromList(self):
+        pass
+
+
+if __name__ == "__main__":
+    # Create the Qt Application
+    app = QApplication(sys.argv)
+    MainWindow = QMainWindow()
+
+    # Create an instance and show the form
+    ui = myApp(MainWindow)
+
+    # show the window and start the app
+    MainWindow.show()
+    app.exec_()
